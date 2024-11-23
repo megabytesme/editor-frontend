@@ -8,6 +8,8 @@
 let wordcountURL = "http://wordcount.editor.qpc.qubcloud.uk";
 let charcountURL = "http://charcount.editor.qpc.qubcloud.uk";
 
+let vowelcountURL = "http://vowel-count.40334072.qpc.qubcloud.uk/vowel"
+
 
 function Wordcount()
 {
@@ -39,6 +41,19 @@ function Charcount()
     xhttp.send();
 }
 
+function Vowelcount() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var j = JSON.parse(this.responseText);
+            document.getElementById('output').value = j.vowelCount;
+        }
+    };
+
+    let url = vowelcountURL + "/countvowels?text=" + encodeURIComponent(document.getElementById('content').value);
+    xhttp.open("GET", url, true);
+    xhttp.send();
+}
 
 </script>
 
@@ -104,7 +119,7 @@ body  {
         <button class="operation" onclick="Charcount();">Character Count</button>
     </div>
     <div>
-        <button class="operation" onclick="">??</button>
+        <button class="operation" onclick="Vowelcount()">Vowel Count</button>
         <button class="operation" onclick="">??</button>
     </div>
     <div>
