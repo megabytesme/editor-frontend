@@ -10,6 +10,7 @@ let charcountURL = "http://charcount.editor.qpc.qubcloud.uk";
 
 let vowelcountURL = "http://vowel-count.40334072.qpc.qubcloud.uk/vowel"
 let commacountURL = "http://comma-count.40334072.qpc.qubcloud.uk/count_commas"
+let averagewordcountURL = "http://average-word-count.40334072.qpc.qubcloud.uk/"
 
 function Wordcount()
 {
@@ -65,6 +66,20 @@ function Commacount() {
     };
 
     let url = commmacountURL + "/count_commas?text=" + encodeURIComponent(document.getElementById('content').value);
+    xhttp.open("GET", url, true);
+    xhttp.send();
+}
+
+function AverageWordcount() {
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var j = JSON.parse(this.responseText);
+            document.getElementById('output').value = j.average_word_length;
+        }
+    };
+
+    let url = averagewordcountURL + "?text=" + encodeURIComponent(document.getElementById('content').value);
     xhttp.open("GET", url, true);
     xhttp.send();
 }
@@ -137,7 +152,7 @@ body  {
         <button class="operation" onclick="Commacount()">Comma Count</button>
     </div>
     <div>
-        <button class="operation" onclick="">??</button>
+        <button class="operation" onclick="AverageWordcount()">Average Word Count</button>
         <button class="operation" onclick="">??</button>
     </div>
     <div>
