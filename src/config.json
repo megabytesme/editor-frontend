@@ -1,0 +1,9 @@
+{
+    "wordcountURL": "http://wordcount.editor.qpc.qubcloud.uk",
+    "charcountURL": "http://charcount.editor.qpc.qubcloud.uk",
+    "vowelcountURL": "http://vowel-count.40334072.qpc.qubcloud.uk/vowel",
+    "commacountURL": "http://comma-count.40334072.qpc.qubcloud.uk/count_commas",
+    "averagewordcountURL": "http://average-word-count.40334072.qpc.qubcloud.uk/",
+    "palindromecountURL": "http://palindrome-count.40334072.qpc.qubcloud.uk/count_palindromes"
+  }
+  

@@ -4,14 +4,21 @@
 <title>QUBeditotron3000</title>
 
 <script type="text/javascript">
+  fetch('config.json')
+    .then(response => response.json())
+    .then(config => {
+      let wordcountURL = config.wordcountURL;
+      let charcountURL = config.charcountURL;
+      let vowelcountURL = config.vowelcountURL;
+      let commacountURL = config.commacountURL;
+      let averagewordcountURL = config.averagewordcountURL;
+      let palindromecountURL = config.palindromecountURL;
 
-let wordcountURL = "http://wordcount.editor.qpc.qubcloud.uk";
-let charcountURL = "http://charcount.editor.qpc.qubcloud.uk";
-
-let vowelcountURL = "http://vowel-count.40334072.qpc.qubcloud.uk/vowel"
-let commacountURL = "http://comma-count.40334072.qpc.qubcloud.uk/count_commas"
-let averagewordcountURL = "http://average-word-count.40334072.qpc.qubcloud.uk/"
-let palindromecountURL = "http://palindrome-count.40334072.qpc.qubcloud.uk/count_palindromes"
+      console.log(wordcountURL, charcountURL, vowelcountURL, commacountURL, averagewordcountURL, palindromecountURL);
+    })
+    .catch(error => {
+      console.error('Error loading configuration:', error);
+    });
 
 function Wordcount()
 {
