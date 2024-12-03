@@ -2,192 +2,151 @@
 <html>
 <head>
 <title>QUBeditotron3000</title>
-
 <script type="text/javascript">
+  let wordcountURL, charcountURL, vowelcountURL, commacountURL, averagewordcountURL, palindromecountURL;
+
   fetch('config.json')
     .then(response => response.json())
     .then(config => {
-      let wordcountURL = config.wordcountURL;
-      let charcountURL = config.charcountURL;
-      let vowelcountURL = config.vowelcountURL;
-      let commacountURL = config.commacountURL;
-      let averagewordcountURL = config.averagewordcountURL;
-      let palindromecountURL = config.palindromecountURL;
-
+      wordcountURL = config.wordcountURL;
+      charcountURL = config.charcountURL;
+      vowelcountURL = config.vowelcountURL;
+      commacountURL = config.commacountURL;
+      averagewordcountURL = config.averagewordcountURL;
+      palindromecountURL = config.palindromecountURL;
       console.log(wordcountURL, charcountURL, vowelcountURL, commacountURL, averagewordcountURL, palindromecountURL);
     })
     .catch(error => {
       console.error('Error loading configuration:', error);
     });
 
-function Wordcount()
-{
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var j = JSON.parse(this.response);
-            document.getElementById('output').value = j.answer;
-        }
-    };
+  async function fetchData(url) {
+    const response = await fetch(url);
+    if (response.ok) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  }
 
-    let url = wordcountURL + "/?text=" + encodeURI(document.getElementById('content').value);
-    xhttp.open("GET",url);
-    xhttp.send();
-}
+  function updateOutput(id, value) {
+    document.getElementById(id).value = value;
+  }
 
-function Charcount()
-{
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var j = JSON.parse(this.response);
-            document.getElementById('output').value = j.answer;
-        }
-    };
+  async function Wordcount() {
+    try {
+      const url = `${wordcountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.answer);
+    } catch (error) {
+      console.error('Error fetching word count:', error);
+    }
+  }
 
-    let url = charcountURL + "/?text=" + encodeURI(document.getElementById('content').value);
-    xhttp.open("GET",url);
-    xhttp.send();
-}
+  async function Charcount() {
+    try {
+      const url = `${charcountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.answer);
+    } catch (error) {
+      console.error('Error fetching character count:', error);
+    }
+  }
 
-function Vowelcount() {
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var j = JSON.parse(this.responseText);
-            document.getElementById('output').value = j.vowelCount;
-        }
-    };
+  async function Vowelcount() {
+    try {
+      const url = `${vowelcountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.vowelCount);
+    } catch (error) {
+      console.error('Error fetching vowel count:', error);
+    }
+  }
 
-    let url = vowelcountURL + "/countvowels?text=" + encodeURIComponent(document.getElementById('content').value);
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}
+  async function Commacount() {
+    try {
+      const url = `${commacountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.comma_count);
+    } catch (error) {
+      console.error('Error fetching comma count:', error);
+    }
+  }
 
-function Commacount() {
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var j = JSON.parse(this.responseText);
-            document.getElementById('output').value = j.comma_count;
-        }
-    };
+  async function AverageWordcount() {
+    try {
+      const url = `${averagewordcountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.average_word_length);
+    } catch (error) {
+      console.error('Error fetching average word count:', error);
+    }
+  }
 
-    let url = commmacountURL + "/count_commas?text=" + encodeURIComponent(document.getElementById('content').value);
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}
-
-function AverageWordcount() {
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var j = JSON.parse(this.responseText);
-            document.getElementById('output').value = j.average_word_length;
-        }
-    };
-
-    let url = averagewordcountURL + "?text=" + encodeURIComponent(document.getElementById('content').value);
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}
-
-function PalindromeCount() {
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var j = JSON.parse(this.responseText);
-            document.getElementById('output').value = j.palindrome_count;
-        }
-    };
-
-    let url = palindromecountURL + "?text=" + encodeURIComponent(document.getElementById('content').value);
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}
-
+  async function PalindromeCount() {
+    try {
+      const url = `${palindromecountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.palindrome_count);
+    } catch (error) {
+      console.error('Error fetching palindrome count:', error);
+    }
+  }
 </script>
-
 <style type="text/css">
-body  {
-    font-size: 150%;
-    font-family: monospace;
-}
-
-#logo
-{
-    font-family: Calibri, sans-serif;
-    font-weight: lighter;
-    color: #505050;
-    margin: 0.5em;
-}
-
-#editor
-{
-    text-align: center;
-    margin-top: 1em;
-}
-
-#output {
-    font-size: 100%;
-    padding: 0.2em;
-    margin: 0.2em;
-    font-family: monospace;
-    letter-spacing: 0.1em;
-}
-
-#content {
-    font-size: 100%;
-    padding: 0.2em;
-    margin: 0.2em;
-    font-family: monospace;
-    letter-spacing: 0.1em;
-}
-
-.operation {
-    border: solid #d0d0d0 1px;
-    background-color: #f0f0f0;
-    padding: 1.5em;
-    margin: 1em;
-    width: 14em;
-}
+  body {
+      font-size: 150%;
+      font-family: monospace;
+  }
+  #logo {
+      font-family: Calibri, sans-serif;
+      font-weight: lighter;
+      color: #505050;
+      margin: 0.5em;
+  }
+  #editor {
+      text-align: center;
+      margin-top: 1em;
+  }
+  #output, #content {
+      font-size: 100%;
+      padding: 0.2em;
+      margin: 0.2em;
+      font-family: monospace;
+      letter-spacing: 0.1em;
+  }
+  .operation {
+      border: solid #d0d0d0 1px;
+      background-color: #f0f0f0;
+      padding: 1.5em;
+      margin: 1em;
+      width: 14em;
+  }
 </style>
-
 </head>
 <body>
-<div id="editor">
-    <div id="logo">
-        QUBeditotron3000
-    </div>
-    <div>
-        <textarea rows="5" cols="40" id="content">It was the best of cloud, it was the worst of cloud...</textarea>
-    </div>
-    <div>
-        <input type="text" id="output" readonly="1" value="" />
-    </div>
-    <div>
-        <button class="operation" onclick="Wordcount();">Word Count</button>
-        <button class="operation" onclick="Charcount();">Character Count</button>
-    </div>
-    <div>
-        <button class="operation" onclick="Vowelcount()">Vowel Count</button>
-        <button class="operation" onclick="Commacount()">Comma Count</button>
-    </div>
-    <div>
-        <button class="operation" onclick="AverageWordcount()">Average Word Count</button>
-        <button class="operation" onclick="PalindromeCount()">Palindrome Count</button>
-    </div>
-    <div>
-        <button class="operation" onclick="">??</button>
-        <button class="operation" onclick="">??</button>
-    </div>
-    <div>
-        <button class="operation" onclick="">??</button>
-        <button class="operation" onclick="">??</button>
-    </div>
-    
-</div>
+  <div id="editor">
+      <div id="logo">
+          QUBeditotron3000
+      </div>
+      <div>
+          <textarea rows="5" cols="40" id="content">It was the best of cloud, it was the worst of cloud...</textarea>
+      </div>
+      <div>
+          <input type="text" id="output" readonly="1" value="" />
+      </div>
+      <div>
+          <button class="operation" onclick="Wordcount();">Word Count</button>
+          <button class="operation" onclick="Charcount();">Character Count</button>
+      </div>
+      <div>
+          <button class="operation" onclick="Vowelcount()">Vowel Count</button>
+          <button class="operation" onclick="Commacount()">Comma Count</button>
+      </div>
+      <div>
+          <button class="operation" onclick="AverageWordcount()">Average Word Count</button>
+          <button class="operation" onclick="PalindromeCount()">Palindrome Count</button>
+      </div>
+  </div>
 </body>
-
-
 </html>
