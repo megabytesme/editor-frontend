@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>QUBeditotron3000</title>
+<script type="text/javascript">
+  let wordcountURL, charcountURL, vowelcountURL, commacountURL, averagewordcountURL, palindromecountURL, saveURL, recallURL;
+
+  fetch('config.json')
+    .then(response => response.json())
+    .then(config => {
+      wordcountURL = config.wordcountURL;
+      charcountURL = config.charcountURL;
+      vowelcountURL = config.vowelcountURL;
+      commacountURL = config.commacountURL;
+      averagewordcountURL = config.averagewordcountURL;
+      palindromecountURL = config.palindromecountURL;
+      saveURL = config.saveURL;
+      recallURL = config.recallURL;
+      console.log(wordcountURL, charcountURL, vowelcountURL, commacountURL, averagewordcountURL, palindromecountURL, saveURL, recallURL);
+    })
+    .catch(error => {
+      console.error('Error loading configuration:', error);
+    });
+
+  async function fetchData(url, options = {}) {
+    const response = await fetch(url, options);
+    if (response.ok) {
+      return await response.json();
+    } else {
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        errorData = { message: 'Unexpected error' };
+      }
+      throw new Error(errorData.message || 'Network response was not ok.');
+    }
+  }
+
+  function updateOutput(id, value) {
+    document.getElementById(id).value = value;
+  }
+
+  function displayError(message) {
+    const outputElement = document.getElementById('output');
+    outputElement.value = `Error: ${message}`;
+    outputElement.style.color = 'red';
+
+    let fontSize = 16; // Default font size
+    outputElement.style.fontSize = `${fontSize}px`;
+
+    while (outputElement.scrollHeight > outputElement.clientHeight) {
+        fontSize -= 1;
+        outputElement.style.fontSize = `${fontSize}px`;
+    }
+  }
+
+  function clearOutput() {
+    const outputElement = document.getElementById('output');
+    outputElement.value = '';
+    outputElement.style.color = 'black';
+    outputElement.style.fontSize = 'inherit'; // Reset the font size
+  }
+
+  async function saveText() {
+    clearOutput();
+    try {
+      const text = document.getElementById('content').value;
+      const result = await fetchData(saveURL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ text })
+      });
+      updateOutput('output', `Text saved. ID: ${result.identifier}`);
+    } catch (error) {
+      console.error('Error saving text:', error);
+      displayError(error.message);
+    }
+  }
+
+  async function recallText() {
+    clearOutput();
+    try {
+      const identifier = document.getElementById('identifier').value;
+      const result = await fetchData(`${recallURL}/${identifier}`);
+      document.getElementById('content').value = result.text;
+    } catch (error) {
+      console.error('Error recalling text:', error);
+      displayError(error.message);
+    }
+  }
+</script>
+<style type="text/css">
+  body {
+      font-size: 150%;
+      font-family: monospace;
+  }
+  #logo {
+      font-family: Calibri, sans-serif;
+      font-weight: lighter;
+      color: #505050;
+      margin: 0.5em;
+  }
+  #editor {
+      text-align: center;
+      margin-top: 1em;
+  }
+  #output, #content {
+      font-size: 100%;
+      padding: 0.2em;
+      margin: 0.2em;
+      font-family: monospace;
+      letter-spacing: 0.1em;
+  }
+  #output {
+    width: 80%;
+  }
+  .operation {
+      border: solid #d0d0d0 1px;
+      background-color: #f0f0f0;
+      padding: 1.5em;
+      margin: 1em;
+      width: 14em;
+  }
+</style>
+</head>
+  <body>
+    <div id="editor">
+        <div id="logo">
+            QUBeditotron3000
+        </div>
+        <div>
+            <textarea rows="5" cols="40" id="content">It was the best of cloud, it was the worst of cloud...</textarea>
+        </div>
+        <div>
+            <input type="text" id="output" readonly="1" value="" />
+        </div>
+        <div>
+            <input type="text" id="identifier" placeholder="Enter identifier to recall text" />
+        </div>
+        <div>
+            <button class="operation" onclick="recallText();">Recall Text</button>
+            <button class="operation" onclick="saveText();">Save Text</button>
+        </div>
+        <div>
+            <button class="operation" onclick="Wordcount();">Word Count</button>
+            <button class="operation" onclick="Charcount();">Character Count</button>
+        </div>
+        <div>
+            <button class="operation" onclick="Vowelcount()">Vowel Count</button>
+            <button class="operation" onclick="Commacount()">Comma Count</button>
+        </div>
+        <div>
+            <button class="operation" onclick="AverageWordcount()">Average Word Count</button>
+            <button class="operation" onclick="PalindromeCount()">Palindrome Count</button>
+        </div>
+    </div>
+  </body>
+</html>
