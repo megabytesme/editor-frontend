@@ -1,10 +1,10 @@
 {
-  "wordcountURL": "http://140.238.98.82:25565/editor-wordcount",
-  "charcountURL": "http://140.238.98.82:25565/editor-charcount",
-  "vowelcountURL": "http://140.238.98.82:25565/editor-vowel-count/vowel-count",
-  "commacountURL": "http://140.238.98.82:25565/editor-comma-counter/count_commas",
-  "averagewordcountURL": "http://140.238.98.82:25565/editor-average-word-length/average-word-length",
-  "palindromecountURL": "http://140.238.98.82:25565/editor-palindrome-count/count_palindromes",
-  "saveURL": "http://localhost:5000/save",
-  "recallURL": "http://localhost:5000/recall"
+  "wordcountURL": "http://144.21.57.120:8088/editor-wordcount",
+  "charcountURL": "http://144.21.57.120:8088/editor-charcount",
+  "vowelcountURL": "http://144.21.57.120:8088/editor-vowel-count/vowel-count",
+  "commacountURL": "http://144.21.57.120:8088/editor-comma-counter/count_commas",
+  "averagewordcountURL": "http://144.21.57.120:8088/editor-average-word-length/average-word-length",
+  "palindromecountURL": "http://144.21.57.120:8088/editor-palindrome-count/count_palindromes",
+  "saveURL": "http://144.21.57.120:5000/save",
+  "recallURL": "http://144.21.57.120:5000/recall"
 }
