@@ -1,3 +1,6 @@
-FROM php:7.2-apache
-COPY src/ /var/www/html/
-EXPOSE 80
+FROM python:3.9-slim
+WORKDIR /app
+COPY src/ /app/
+RUN pip install flask flask-cors
+EXPOSE 5000
+CMD ["python", "app.py"]
