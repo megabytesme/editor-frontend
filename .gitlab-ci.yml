@@ -8,6 +8,6 @@ test:
   script:
     - apt-get update -qy
     - apt-get install -y python3 python3-pip
-    - pip3 install flask flask-testing
+    - pip3 install flask flask-testing flask-cors
     - cd src
     - python3 -m unittest test
