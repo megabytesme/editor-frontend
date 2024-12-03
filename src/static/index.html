@@ -46,7 +46,7 @@
     outputElement.value = `Error: ${message}`;
     outputElement.style.color = 'red';
 
-    let fontSize = 16; // Default font size
+    let fontSize = 16;
     outputElement.style.fontSize = `${fontSize}px`;
 
     while (outputElement.scrollHeight > outputElement.clientHeight) {
@@ -59,7 +59,7 @@
     const outputElement = document.getElementById('output');
     outputElement.value = '';
     outputElement.style.color = 'black';
-    outputElement.style.fontSize = 'inherit'; // Reset the font size
+    outputElement.style.fontSize = 'inherit';
   }
 
   async function saveText() {
@@ -71,21 +71,106 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ text })
       });
-      updateOutput('output', `Text saved. ID: ${result.identifier}`);
+      updateOutput('output', result.identifier);
     } catch (error) {
       console.error('Error saving text:', error);
       displayError(error.message);
     }
   }
+  
+  function toggleRecallButton() {
+    const identifier = document.getElementById('identifier').value;
+    const recallButton = document.getElementById('recallButton');
+    recallButton.disabled = !identifier;
+  }
+
+  document.addEventListener('DOMContentLoaded', (event) => {
+    toggleRecallButton();
+  });
 
   async function recallText() {
     clearOutput();
     try {
       const identifier = document.getElementById('identifier').value;
+      if (!identifier) {
+        throw new Error('Identifier is required to recall text.');
+      }
       const result = await fetchData(`${recallURL}/${identifier}`);
       document.getElementById('content').value = result.text;
     } catch (error) {
       console.error('Error recalling text:', error);
+      displayError(error.message);
+    }
+  }
+
+  async function Wordcount() {
+    clearOutput();
+    try {
+      const url = `${wordcountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.answer);
+    } catch (error) {
+      console.error('Error fetching word count:', error);
+      displayError(error.message);
+    }
+  }
+
+  async function Charcount() {
+    clearOutput();
+    try {
+      const url = `${charcountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.answer);
+    } catch (error) {
+      console.error('Error fetching character count:', error);
+      displayError(error.message);
+    }
+  }
+
+  async function Vowelcount() {
+    clearOutput();
+    try {
+      const url = `${vowelcountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.vowel_count);
+    } catch (error) {
+      console.error('Error fetching vowel count:', error);
+      displayError(error.message);
+    }
+  }
+
+  async function Commacount() {
+    clearOutput();
+    try {
+      const url = `${commacountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.comma_count);
+    } catch (error) {
+      console.error('Error fetching comma count:', error);
+      displayError(error.message);
+    }
+  }
+
+  async function AverageWordcount() {
+    clearOutput();
+    try {
+      const url = `${averagewordcountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.average_word_length);
+    } catch (error) {
+      console.error('Error fetching average word count:', error);
+      displayError(error.message);
+    }
+  }
+
+  async function PalindromeCount() {
+    clearOutput();
+    try {
+      const url = `${palindromecountURL}?text=${encodeURIComponent(document.getElementById('content').value)}`;
+      const result = await fetchData(url);
+      updateOutput('output', result.palindrome_count);
+    } catch (error) {
+      console.error('Error fetching palindrome count:', error);
       displayError(error.message);
     }
   }
@@ -136,10 +221,9 @@
             <input type="text" id="output" readonly="1" value="" />
         </div>
         <div>
-            <input type="text" id="identifier" placeholder="Enter identifier to recall text" />
-        </div>
+            <input type="text" id="identifier" placeholder="Enter identifier to recall text" oninput="toggleRecallButton();" />
         <div>
-            <button class="operation" onclick="recallText();">Recall Text</button>
+            <button class="operation" id="recallButton" onclick="recallText();" disabled>Recall        </div>
             <button class="operation" onclick="saveText();">Save Text</button>
         </div>
         <div>
