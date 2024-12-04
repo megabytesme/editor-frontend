@@ -1,10 +1,24 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import uuid
+import json
+import os
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 CORS(app)
-saved_texts = {}
+DATA_FILE = 'saved_texts.json'
+
+def read_saved_texts():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r') as file:
+            return json.load(file)
+    return {}
+
+def write_saved_texts(data):
+    with open(DATA_FILE, 'w') as file:
+        json.dump(data, file)
+
+saved_texts = read_saved_texts()
 
 @app.route('/save', methods=['POST'])
 def save_text():
@@ -14,6 +28,7 @@ def save_text():
 
     identifier = str(uuid.uuid4())
     saved_texts[identifier] = text
+    write_saved_texts(saved_texts)
 
     return jsonify({'identifier': identifier}), 201
 
