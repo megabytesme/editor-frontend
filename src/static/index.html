@@ -62,6 +62,23 @@
     outputElement.style.fontSize = 'inherit';
   }
 
+  function toggleRecallButton() {
+    const identifier = document.getElementById('identifier').value;
+    const recallButton = document.getElementById('recallButton');
+    recallButton.disabled = !identifier;
+  }
+
+  function toggleSaveButton() {
+    const content = document.getElementById('content').value;
+    const saveButton = document.getElementById('saveButton');
+    saveButton.disabled = content.length === 0;
+  }
+
+  document.addEventListener('DOMContentLoaded', (event) => {
+    toggleRecallButton();
+    toggleSaveButton();
+  });
+
   async function saveText() {
     clearOutput();
     try {
@@ -77,16 +94,6 @@
       displayError(error.message);
     }
   }
-  
-  function toggleRecallButton() {
-    const identifier = document.getElementById('identifier').value;
-    const recallButton = document.getElementById('recallButton');
-    recallButton.disabled = !identifier;
-  }
-
-  document.addEventListener('DOMContentLoaded', (event) => {
-    toggleRecallButton();
-  });
 
   async function recallText() {
     clearOutput();
@@ -215,16 +222,17 @@
             QUBeditotron3000
         </div>
         <div>
-            <textarea rows="5" cols="40" id="content">It was the best of cloud, it was the worst of cloud...</textarea>
+            <textarea rows="5" cols="40" id="content" oninput="toggleSaveButton();">It was the best of cloud, it was the worst of cloud...</textarea>
         </div>
         <div>
             <input type="text" id="output" readonly="1" value="" />
         </div>
         <div>
             <input type="text" id="identifier" placeholder="Enter identifier to recall text" oninput="toggleRecallButton();" />
+        </div>
         <div>
-            <button class="operation" id="recallButton" onclick="recallText();" disabled>Recall        </div>
-            <button class="operation" onclick="saveText();">Save Text</button>
+            <button class="operation" id="recallButton" onclick="recallText();" disabled>Recall Text</button>
+            <button class="operation" id="saveButton" onclick="saveText();" disabled>Save Text</button>
         </div>
         <div>
             <button class="operation" onclick="Wordcount();">Word Count</button>
