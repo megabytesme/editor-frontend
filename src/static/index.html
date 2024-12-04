@@ -98,17 +98,17 @@
   async function recallText() {
     clearOutput();
     try {
-      const identifier = document.getElementById('identifier').value;
-      if (!identifier) {
-        throw new Error('Identifier is required to recall text.');
-      }
-      const result = await fetchData(`${recallURL}/${identifier}`);
-      document.getElementById('content').value = result.text;
+        const identifier = document.getElementById('identifier').value;
+        if (!identifier) {
+            throw new Error('Identifier is required to recall text.');
+        }
+        const result = await fetchData(`${recallURL}/${identifier}`);
+        document.getElementById('content').value = result.text;
     } catch (error) {
-      console.error('Error recalling text:', error);
-      displayError(error.message);
+        console.error('Error recalling text:', error);
+        displayError("Provided identifier is invalid.");
     }
-  }
+}
 
   async function Wordcount() {
     clearOutput();
